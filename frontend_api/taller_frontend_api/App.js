@@ -4,9 +4,10 @@ import React, {useState, useEffect} from 'react'
 export default function App() {
 
   const [variable, setVariable] = useState([])
-  const [character, setCharacter] = useState([])
+  const [name, setName] = useState("")
+  const [franchise, setFranchise] = useState("")
 
-  const datos = { name: character }
+  
 
 
   function traerDatos() {
@@ -20,16 +21,21 @@ export default function App() {
   }
 
   function mandarDatos(){
+    const datos = { 
+      name: name, 
+      franchise: franchise
+    }
     fetch('http://10.14.174.27:8000/api/character',{
       method: 'POST',
       headers: {
-        'Content-Type' : 'aplication/json'
+        'Content-Type' : 'application/json'
       },
       body: JSON.stringify(datos),
     })
     .then(response => response.json())
     .then(data=>{
-      setCharacter("")
+      setName("")
+      setFranchise("")
     })
     .catch(error => console.error(error))
   }
@@ -47,8 +53,16 @@ export default function App() {
     <TextInput
       placeholder='Ingresa Tu Personaje'
         maxLength={25}
-        value={character}
-        onChangeText={setCharacter}
+        value={name}
+        onChangeText={setName}
+    >
+    </TextInput>
+
+    <TextInput
+      placeholder='Ingresa la franquisia de tu personaje'
+        maxLength={25}
+        value={franchise}
+        onChangeText={setFranchise}
     >
     </TextInput>
 
@@ -70,7 +84,7 @@ export default function App() {
         </Text>
       </Pressable>
 
-        <View> style={styles.container}
+        <View>
           {variable.map(dato => 
           <View key={dato.id}>
             <Text>
@@ -90,7 +104,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  button:{
-    marginTop: 30
-  }
+
 })
